@@ -11,6 +11,13 @@ Public Function Backup()
     
 End Function
 
+Public Function DebugMode()
+
+    debugModeFlg = True
+    MsgBox "デバッグモードで起動"
+
+End Function
+
 Public Function IsCareerDataSheet() As Boolean
     
     IsCareerDataSheet = (ActiveSheet.Name = "記録室_" & ActiveSheet.Cells(2, "A").Value)
