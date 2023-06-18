@@ -1,4 +1,105 @@
 Attribute VB_Name = "mpb_vbascript_matchCompletion"
+Dim strSeason As String
+Dim numSection As Integer
+
+Dim pictureRangeSchedule, pictureRangeRanking As ChartObject
+Dim pictureName As String
+Dim minFileSize As Long
+
+Sub matchCompletion()
+    
+    ' デバッグモード確認
+    ' Call DebugMode
+
+    ' エラーチェック
+    If Not IsScheduleSheet() Then
+        MsgBox "matchCompletion.Error : 0000"
+        End
+    End If
+    
+    ' 初期化
+    Call Initialize
+    
+    ' スケジュールのステータスチェック
+    If IsSectionCompleted() Then
+        Call MakeMPBNewsSeasonEvent
+        Call MakeMPBNewsOfThisSection
+        Call MakeMPBNewsOfAccident
+        Call MakeMPBNewsOfNextGame
+    End If
+    
+    Call SavePictureOfSchedule
+    Call SavePictureOfRanking
+    
+    Call ExitProcess
+
+End Sub
+
+' 定数・シート状態の初期化
+Function Initialize()
+
+
+
+End Function
+
+' 終了時処理
+Function ExitProcess()
+
+
+
+End Function
+
+
+' 節が完了してスペ判定を行える状態かを判定
+Function IsSectionCompleted() As Boolean
+
+    
+
+End Function
+
+' 節の進行により発生する、あらかじめ予定されているイベントを出力
+Function MakeMPBNewsSeasonEvent()
+
+
+
+End Function
+
+' 節の進行により発生する、優勝マジックや自力優勝に関するイベントを出力
+Function MakeMPBNewsOfThisSection()
+
+
+
+End Function
+
+' スペ判定・結果を出力
+Function MakeMPBNewsOfAccident()
+
+
+
+End Function
+
+' 次節日程調整の依頼を出力
+Function MakeMPBNewsOfNextGame()
+
+
+
+End Function
+
+' スケジュール画像を出力
+Function SavePictureOfSchedule()
+
+
+
+End Function
+
+' 成績画像を出力
+Function SavePictureOfRanking()
+
+
+
+End Function
+
+
 Sub 画像保存()
 
     ' エラーチェック
