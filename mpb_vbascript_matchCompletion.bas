@@ -1,26 +1,26 @@
 Attribute VB_Name = "mpb_vbascript_matchCompletion"
-Dim strSeason As String
-Dim numSection As Integer
+Dim season As String
+Dim game As Integer
+Dim section As Integer
 
-Dim pictureRangeSchedule, pictureRangeRanking As ChartObject
-Dim pictureName As String
-Dim minFileSize As Long
+Dim DICT_TEAMNAME As Object
+Dim DICT_ACCIDENT_HDCP As Object
 
 Sub matchCompletion()
     
-    ' デバッグモード確認
+    ' デバッグモード
     ' Call DebugMode
 
-    ' エラーチェック
+    ' 呼出元確認
     If Not IsScheduleSheet() Then
-        MsgBox "matchCompletion.Error : 0000"
+        MsgBox "呼出元確認エラー", _
+               vbCritical, _
+               "[ERROR] matchCompletion"
         End
     End If
     
-    ' 初期化
     Call Initialize
     
-    ' スケジュールのステータスチェック
     If IsSectionCompleted() Then
         Call MakeMPBNewsSeasonEvent
         Call MakeMPBNewsOfThisSection
@@ -38,23 +38,88 @@ End Sub
 ' 定数・シート状態の初期化
 Function Initialize()
 
-
-
+    If Not debugModeFlg Then
+        Application.ScreenUpdating = False
+    End If
+    
+    Application.Calculate
+    
+    season = ActiveSheet.Cells(1, "A").Value
+    game = WorksheetFunction.CountIf(ActiveSheet.Range("BA2:BA241"), 0) / 4
+    section = WorksheetFunction.CountIf(ActiveSheet.Range("BA2:BA241"), 0) / 8
+    
+    Sheets(season & "_投手データ").Unprotect
+    Sheets(season & "_野手データ").Unprotect
+    
+    Set DICT_TEAMNAME = CreateObject("Scripting.Dictionary")
+    With DICT_TEAMNAME
+        .Add "G", "ジャイアンツ"
+        .Add "M", "マリーンズ"
+        .Add "T", "タイガース"
+        .Add "L", "ライオンズ"
+        .Add "E", "イーグルス"
+    End With
+    
+    Set DICT_ACCIDENT_HDCP = CreateObject("Scripting.Dictionary")
+    With DICT_ACCIDENT_HDCP
+        .Add "G", 1#
+        .Add "M", 1#
+        .Add "T", 1#
+        .Add "L", 1#
+        .Add "E", 1#
+    End With
+    
 End Function
 
 ' 終了時処理
 Function ExitProcess()
 
+    Sheets(season & "_投手データ").Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
+    Sheets(season & "_野手データ").Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
 
-
+    If Not debugModeFlg Then
+        Application.ScreenUpdating = True
+    End If
+    
+    End
+    
 End Function
-
 
 ' 節が完了してスペ判定を行える状態かを判定
 Function IsSectionCompleted() As Boolean
 
+    ' 消化試合数から節が完了していないことがわかるパターン
+    If game <> section * 2 Then
+        IsSectionCompleted = False
+        Exit Function
+    End If
     
-
+    ' 節は完了しているが不正入力があるパターン
+    If ActiveSheet.Cells(section * 8 + 3, "D").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "D").Value <> "" Or _
+       ActiveSheet.Cells(section * 8 + 3, "F").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "F").Value <> "" Or _
+       ActiveSheet.Cells(section * 8 + 3, "H").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "H").Value <> "" Then
+        MsgBox "不正入力エラー", _
+               vbCritical, _
+               "[ERROR] IsSectionCompleted"
+        Call ExitProcess
+    End If
+    
+    ' 予告先発が出揃っていないパターン
+    If section > 0 Then
+        IsSectionCompleted = True
+        Exit Function
+    End If
+    
+    If ActiveSheet.Cells(section * 8 + 2, "D").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "D").Value = "" Or _
+       ActiveSheet.Cells(section * 8 + 2, "H").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "H").Value = "" Then
+        MsgBox "予告先発未完了エラー", _
+               vbCritical, _
+               "[ERROR] IsSectionCompleted"
+        Call ExitProcess
+    End If
+    
+    IsSectionCompleted = True
+    
 End Function
 
 ' 節の進行により発生する、あらかじめ予定されているイベントを出力
