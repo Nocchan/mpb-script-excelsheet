@@ -6,6 +6,8 @@ Dim section As Integer
 Dim DICT_TEAMNAME As Object
 Dim DICT_ACCIDENT_HDCP As Object
 
+Dim MPB_WORK_DIRECTORY_PATH As String
+
 Sub matchCompletion()
     
     ' デバッグモード
@@ -13,9 +15,7 @@ Sub matchCompletion()
 
     ' 呼出元確認
     If Not IsScheduleSheet() Then
-        MsgBox "呼出元確認エラー", _
-               vbCritical, _
-               "[ERROR] matchCompletion"
+        Call MessageError("呼出元確認エラー", "matchCompletion")
         End
     End If
     
@@ -69,6 +69,8 @@ Function Initialize()
         .Add "E", 1#
     End With
     
+    MPB_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\マイドライブ\MPB\1-まる"
+    
 End Function
 
 ' 終了時処理
@@ -98,23 +100,20 @@ Function IsSectionCompleted() As Boolean
     If ActiveSheet.Cells(section * 8 + 3, "D").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "D").Value <> "" Or _
        ActiveSheet.Cells(section * 8 + 3, "F").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "F").Value <> "" Or _
        ActiveSheet.Cells(section * 8 + 3, "H").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "H").Value <> "" Then
-        MsgBox "不正入力エラー", _
-               vbCritical, _
-               "[ERROR] IsSectionCompleted"
+        Call MessageError("不正入力エラー", "IsSectionCompleted")
         Call ExitProcess
     End If
     
-    ' 予告先発が出揃っていないパターン
-    If section > 0 Then
+    ' 開幕前または最終節後で予告先発を考える必要がないパターン
+    If section = 0 Or section = 30 Then
         IsSectionCompleted = True
         Exit Function
     End If
     
+    ' 予告先発が出揃っていないパターン
     If ActiveSheet.Cells(section * 8 + 2, "D").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "D").Value = "" Or _
        ActiveSheet.Cells(section * 8 + 2, "H").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "H").Value = "" Then
-        MsgBox "予告先発未完了エラー", _
-               vbCritical, _
-               "[ERROR] IsSectionCompleted"
+        Call MessageError("予告先発未完了エラー", "IsSectionCompleted")
         Call ExitProcess
     End If
     
@@ -125,7 +124,29 @@ End Function
 ' 節の進行により発生する、あらかじめ予定されているイベントを出力
 Function MakeMPBNewsSeasonEvent()
 
-
+    If section = 10 Or section = 20 Then
+    
+    End If
+    
+    If section = 15 Then
+    
+    End If
+    
+    If section = 25 Then
+    
+    End If
+    
+    If section = 26 Or section = 27 Then
+    
+    End If
+    
+    If section = 28 Then
+    
+    End If
+    
+    If section = 30 Then
+    
+    End If
 
 End Function
 
