@@ -3,6 +3,8 @@ Dim season As String
 Dim game As Integer
 Dim section As Integer
 
+Dim dictTeamID As New Dictionary
+
 Dim MPB_WORK_DIRECTORY_PATH As String
 Dim DICT_TEAMNAME As New Dictionary
 
@@ -25,7 +27,7 @@ Dim DICT_ACCIDENT_MARGIN_n As New Dictionary
 Sub matchCompletion()
     
     ' デバッグモード
-    ' Call DebugMode
+    Call DebugMode
 
     ' 呼出元確認
     If Not IsScheduleSheet() Then
@@ -58,10 +60,19 @@ Function Initialize()
     
     Application.Calculate
     
+    Call Backup
+    
     season = ActiveSheet.Cells(1, "A").Value
     game = WorksheetFunction.CountIf(ActiveSheet.Range("BA2:BA241"), 0) / 4
     section = WorksheetFunction.CountIf(ActiveSheet.Range("BA2:BA241"), 0) / 8
     
+    Dim teamID As Integer
+    For teamID = 1 To 5
+        dictTeamID.Add teamID, Sheets(season & "_各種記録").Cells(teamID + 1, "R").Value
+    Next teamID
+    teamID = Nothing
+    
+    Sheets(season & "_スケジュール").Unprotect
     Sheets(season & "_投手データ").Unprotect
     Sheets(season & "_野手データ").Unprotect
     
@@ -114,7 +125,6 @@ Function Initialize()
         .Add "E", DICT_ACCIDENT_MARGIN_E
         .Add "F", DICT_ACCIDENT_MARGIN_F
         .Add "G", DICT_ACCIDENT_MARGIN_G
-        .Add "n", DICT_ACCIDENT_MARGIN_n
     End With
     
     With DICT_ACCIDENT_MARGIN_S
@@ -189,7 +199,8 @@ End Function
 
 ' 終了時処理
 Function ExitProcess()
-
+    
+    Sheets(season & "_スケジュール").Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
     Sheets(season & "_投手データ").Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
     Sheets(season & "_野手データ").Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
 
@@ -211,9 +222,9 @@ Function IsSectionCompleted() As Boolean
     End If
     
     ' 節は完了しているが不正入力があるパターン
-    If ActiveSheet.Cells(section * 8 + 3, "D").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "D").Value <> "" Or _
-       ActiveSheet.Cells(section * 8 + 3, "F").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "F").Value <> "" Or _
-       ActiveSheet.Cells(section * 8 + 3, "H").Value <> "" Or ActiveSheet.Cells(section * 8 + 7, "H").Value <> "" Then
+    If Sheets(season & "_スケジュール").Cells(section * 8 + 3, "D").Value <> "" Or Sheets(season & "_スケジュール").Cells(section * 8 + 7, "D").Value <> "" Or _
+       Sheets(season & "_スケジュール").Cells(section * 8 + 3, "F").Value <> "" Or Sheets(season & "_スケジュール").Cells(section * 8 + 7, "F").Value <> "" Or _
+       Sheets(season & "_スケジュール").Cells(section * 8 + 3, "H").Value <> "" Or Sheets(season & "_スケジュール").Cells(section * 8 + 7, "H").Value <> "" Then
         Call MessageError("不正入力エラー", "IsSectionCompleted")
         Call ExitProcess
     End If
@@ -225,8 +236,8 @@ Function IsSectionCompleted() As Boolean
     End If
     
     ' 予告先発が出揃っていないパターン
-    If ActiveSheet.Cells(section * 8 + 2, "D").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "D").Value = "" Or _
-       ActiveSheet.Cells(section * 8 + 2, "H").Value = "" Or ActiveSheet.Cells(section * 8 + 6, "H").Value = "" Then
+    If Sheets(season & "_スケジュール").Cells(section * 8 + 2, "D").Value = "" Or Sheets(season & "_スケジュール").Cells(section * 8 + 6, "D").Value = "" Or _
+       Sheets(season & "_スケジュール").Cells(section * 8 + 2, "H").Value = "" Or Sheets(season & "_スケジュール").Cells(section * 8 + 6, "H").Value = "" Then
         Call MessageError("予告先発未完了エラー", "IsSectionCompleted")
         Call ExitProcess
     End If
@@ -238,15 +249,20 @@ End Function
 ' 節の進行により発生する、あらかじめ予定されているイベントを出力
 Function MakeMPBNewsSeasonEvent()
     
+    ' 宣言
     Dim mpbNewsSeasonEventFlg As Boolean
     Dim mpbNewsSeasonEvent As String
+    Dim tsobBorderDict As New Dictionary
     
+    ' 初期化
     mpbNewsSeasonEventFlg = False
     mpbNewsSeasonEvent = "【MPB運営からのお知らせ】"
-
+    
+    ' TSOB枠の振り直し
     If section = 10 Or section = 20 Then
         mpbNewsSeasonEventFlg = True
-        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・TSOB枠の振り直しを行います。TSOB枠の表示設定を最新化してください。")
+        
+        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・TSOB枠の振り直しを行います。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "- - - - - - - - - -")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "1位: " & Left(Sheets(season & "_各種記録").Cells(2, "B").Value, 1) & " → 3.5")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "2位: " & Left(Sheets(season & "_各種記録").Cells(3, "B").Value, 1) & " → 4.0")
@@ -255,63 +271,321 @@ Function MakeMPBNewsSeasonEvent()
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "5位: " & Left(Sheets(season & "_各種記録").Cells(6, "B").Value, 1) & " → 5.5")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "※同率チーム発生時には、必ずしもこの通りとならない場合があります。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
+        
+        tsobBorderDict.Add Left(Sheets(season & "_各種記録").Cells(2, "B").Value, 1), "3.5"
+        tsobBorderDict.Add Left(Sheets(season & "_各種記録").Cells(3, "B").Value, 1), "4.0"
+        tsobBorderDict.Add Left(Sheets(season & "_各種記録").Cells(4, "B").Value, 1), "4.5"
+        tsobBorderDict.Add Left(Sheets(season & "_各種記録").Cells(5, "B").Value, 1), "5.0"
+        tsobBorderDict.Add Left(Sheets(season & "_各種記録").Cells(6, "B").Value, 1), "5.5"
+        
+        Sheets(season & "_スケジュール").Cells(27, "CP").Value = tsobBorderDict.Item(Sheets(season & "_スケジュール").Cells(1, "BB").Value)
+        Sheets(season & "_スケジュール").Cells(27, "CQ").Value = tsobBorderDict.Item(Sheets(season & "_スケジュール").Cells(1, "BC").Value)
+        Sheets(season & "_スケジュール").Cells(27, "CR").Value = tsobBorderDict.Item(Sheets(season & "_スケジュール").Cells(1, "BD").Value)
+        Sheets(season & "_スケジュール").Cells(27, "CS").Value = tsobBorderDict.Item(Sheets(season & "_スケジュール").Cells(1, "BE").Value)
+        Sheets(season & "_スケジュール").Cells(27, "CT").Value = tsobBorderDict.Item(Sheets(season & "_スケジュール").Cells(1, "BF").Value)
     End If
     
+    ' HDCP変更受付開始
     If section = 10 Or section = 20 Then
         mpbNewsSeasonEventFlg = True
+        
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・只今より、後半戦からのHDCP変更受付を開始します。第15節終了をもって締め切るので、変更したいチームは、必要に応じて申請を行ってください。変更しない場合は、特に対応不要です。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' HDCP変更中
+    If section = 11 Or section = 12 Or section = 13 Or section = 14 Then
+        mpbNewsSeasonEventFlg = True
+        
+        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・後半戦からのHDCP変更を受付中です。変更したいチームは、第15節終了までに申請を行ってください。")
+        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
+    End If
+    
+    ' HDCP変更受付〆
     If section = 15 Then
         mpbNewsSeasonEventFlg = True
+        
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・只今をもちまして、後半戦に向けたHDCP変更の申請を締め切ります。HDCPの表示設定を最新化してください。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' B9GG提出受付開始
     If section = 25 Then
         mpbNewsSeasonEventFlg = True
+        
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・只今より、B9GGノミネートオーダーの提出受付を開始します。第28節終了をもって締め切るので、各チーム、LINEグループのアルバム「" & season & "B9GGノミネート」に提出をお願いいたします。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' B9GG提出受付中
     If section = 26 Or section = 27 Then
         mpbNewsSeasonEventFlg = True
+        
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・B9GGノミネートオーダーの提出/変更を受付中です。未提出のチームは、第28節が終了するまでに、LINEグループのアルバム「" & season & "B9GGノミネート」への提出をお願いいたします。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' B9GG提出受付〆
     If section = 28 Then
         mpbNewsSeasonEventFlg = True
-        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・B9GGノミネートオーダーを提出受付中です。未提出のチームは、第28節が終了するまでに、LINEグループのアルバム「" & season & "B9GGノミネート」への提出をお願いいたします。")
+        
+        mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・只今をもちまして、B9GGノミネートオーダーの提出を締め切ります。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' MPBアワード案内
     If section = 30 Then
         mpbNewsSeasonEventFlg = True
+        
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "・今シーズン、予定されていた全日程が終了しました。まずは、皆さんお疲れさまでした！この後、MPBアワードを実施しますので、案内をお待ちください。")
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "")
     End If
     
+    ' 結果の出力
     If mpbNewsSeasonEventFlg Then
         mpbNewsSeasonEvent = AddRowText(mpbNewsSeasonEvent, "以上")
-        Call OutputText(mpbNewsSeasonEvent, MPB_WORK_DIRECTORY_PATH & "\mpbnews-seasonevent.txt")
+        
+        If Not debugModeFlg Then
+            Call OutputText(mpbNewsSeasonEvent, MPB_WORK_DIRECTORY_PATH & "\mpbnews-seasonevent.txt")
+        Else
+            Call MessageInfo(mpbNewsSeasonEvent, "MakeMPBNewsSeasonEvent")
+        End If
     End If
 
 End Function
 
 ' 節の進行により発生する、優勝マジックや自力優勝に関するイベントを出力
 Function MakeMPBNewsOfThisSection()
+    
+    ' 実行条件
+    If section = 0 Then
+        Exit Function
+    End If
+    
+    ' 宣言
+    Dim mpbNewsOfThisSectionFlg As Boolean
+    Dim mpbNewsOfThisSection As String
+    Dim seasonStatus As New Dictionary
+    
+    ' 初期化
+    mpbNewsSeasonOfThisSectionFlg = False
+    mpbNewsSeasonOfThisSection = "【MPBニュース】"
+    
+    ' 状況確認(今節実施前)
+    seasonStatus.Add "今節実施前", CheckSeasonStatus(section - 1)
+    
+    ' 今節実施前に優勝が決まっている場合はスキップ
+    If seasonStatus.Item("今節実施前")(0) <> "" Then
+        Exit Function
+    End If
+    
+    ' 状況確認(今節実施後)
+    seasonStatus.Add "今節実施後", CheckSeasonStatus(section)
+    
+    ' 次節を考える必要がない場合
+    If seasonStatus.Item("今節実施後")(0) <> "" Or section = 30 Then
+        Dim teamID As Integer
+        For teamID = 1 To 5
+            If seasonStatus.Item("今節実施後")(teamID) = "優勝" Then
+                mpbNewsOfThisSectionFlg = True
+                mpbNewsOfThisSection = AddRowText(mpbNewsOfThisSection, "◇" & DICT_TEAMNAME.Item(dictTeamID.Item(teamID)) & "◇MPB(" & season & ")優勝が確定！")
+            End If
+        Next teamID
+        teamID = Nothing
+    End If
+    
+    ' 状況確認(次節実施後)
+    If Not mpbNewsOfThisSectionFlg Then
+        seasonStatus.Add "次節◯-●/◯-●", CheckSeasonStatus(section + 1, [["9","-","0"],["9","-","0"]])
+        seasonStatus.Add "次節◯-●/●-◯", CheckSeasonStatus(section + 1, [["9","-","0"],["0","-","9"]])
+        seasonStatus.Add "次節●-◯/◯-●", CheckSeasonStatus(section + 1, [["0","-","9"],["9","-","0"]])
+        seasonStatus.Add "次節●-◯/●-◯", CheckSeasonStatus(section + 1, [["0","-","9"],["0","-","9"]])
+    End If
+    
+    ' Coming Soon
+    
+    ' 結果の出力
+    If mpbNewsOfThisSectionFlg Then
+        If Not debugModeFlg Then
+            Call OutputText(mpbNewsOfThisSection, MPB_WORK_DIRECTORY_PATH & "\mpbnews-section.txt")
+        Else
+            Call MessageInfo(mpbNewsOfThisSection, "MakeMPBNewsOfThisSection")
+        End If
+    End If
+    
+End Function
 
-
-
+Function CheckSeasonStatus(sectionNumber As Integer, Optional ByRef score As String = [["","",""],["","",""]]) As String()
+    
+    Dim tmp(2) As String
+    Dim resultArray(5) As String
+    
+    If sectionNumber < section Then
+        tmp(1) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "F").Value
+        tmp(2) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "F").Value
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "F").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "F").Value = ""
+    ElseIf sectionNumber > section Then
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "D").Value = score(0, 0)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "F").Value = score(0, 1)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "H").Value = score(0, 2)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "D").Value = score(1, 0)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "F").Value = score(1, 1)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "H").Value = score(1, 2)
+    End If
+    
+    Application.Calculate
+    
+    Dim teamID As Integer
+    resultArray(0) = ""
+    For teamID = 1 To 5
+        
+        resultArray(teamID) = "-"
+        
+        If Sheets(seasonName & "_各種記録").Cells(teamID + 1, "BR").Value = 0 Then
+            resultArray(teamID) = "自力V消滅"
+        ElseIf Sheets(seasonName & "_各種記録").Cells(teamID + 1, "BX").Value = "優勝" Then
+            resultArray(teamID) = Sheets(seasonName & "_各種記録").Cells(teamID + 1, "BX").Value
+            resultArray(0) = "優勝チーム決定"
+        ElseIf Sheets(seasonName & "_各種記録").Cells(teamID + 1, "BX").Value <> "-" Then
+            resultArray(teamID) = Sheets(seasonName & "_各種記録").Cells(teamID + 1, "BX").Value
+        End If
+        
+    Next teamID
+    teamID = Nothing
+    
+    If sectionNumber < section Then
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "F").Value = tmp(1)
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "F").Value = tmp(2)
+    ElseIf sectionNumber > section Then
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "D").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "F").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 3, "H").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "D").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "F").Value = ""
+        Sheets(season & "_スケジュール").Cells(sectionNumber * 8 + 7, "H").Value = ""
+    End If
+    
+    Application.Calculate
+    
+    CheckSeasonStatus = resultArray()
+    
 End Function
 
 ' スペ判定・結果を出力
 Function MakeMPBNewsOfAccident()
-
-
-
+    
+    ' 実行条件
+    If section = 30 Then
+        Exit Function
+    End If
+    
+    ' 宣言
+    Dim mpbNewsOfAccidentFlg As Boolean
+    Dim mpbNewsOfAccident As String
+    Dim gamesBeforeThisSection As Integer
+    Dim gamesAfterThisSection As Integer
+    Dim teamBasedAccidentRate As Long
+    
+    ' 初期化
+    mpbNewsOfAccidentFlg = False
+    mpbNewsOfAccident = "【MPBニュース】"
+    gamesBeforeThisSection = -1
+    gamesAfterThisSection = 0
+    teamBasedAccidentRate = 0
+    
+    Dim teamID As Integer
+    Dim rowIdx As Integer
+    Dim dice As Single
+    Dim visibleAccidentPeriod As Integer
+    Dim hiddenAccidentPeriod As Integer
+    Dim accidentInformationFile As String
+    Dim accidentInformationNews As String
+    For teamID = 1 To 5
+        
+        ' 試合状況チェック
+        If section > 0 Then
+            gamesBeforeThisSection = Sheets(season & "_スケジュール").Cells(2 + section - 1, 83 + teamID)
+        End If
+        gamesAfterThisSection = Sheets(season & "_スケジュール").Cells(2 + section, 83 + teamID)
+        
+        ' 基礎スペ率=(BASE_ACCIDENT_RATE)*(ヤ戦病院適用分)*(試合進行係数88.5-111.5%)
+        teamBasedAccidentRate = BASE_ACCIDENT_RATE * DICT_ACCIDENT_HDCP.Item(dictTeamID.Item(teamID)) * (0.885 + (gamesAfterThisSection * 0.01))
+        
+        ' 投手スペ判定
+        For rowIdx = 4 To 50
+        
+            If Sheets(season & "_投手データ").Cells(rowIdx, "A").Value = "" Then
+                Exit For
+            End If
+            
+            ' 基礎スペ率*スペ査定係数での抽選 ※既にケガしている場合は対象外
+            If Sheets(season & "_投手データ").Cells(rowIdx, 282 + gamesAfterThisSection).Value = "" Then
+                Randomize
+                dice = Rnd()
+            Else
+                dice = 1
+            End If
+            If dice < teamBasedAccidentRate * DICT_ACCIDENT_COEFFICIENT.Item(Sheets(season & "_投手データ").Cells(rowIdx, "E").Value) Then
+                ' スペ長さ(表)抽選
+                visibleAccidentPeriod = DrawFromDict(DICT_ACCIDENT_LENGTH_RATE)
+                ' スペ長さ(裏)抽選
+                hiddenAccidentPeriod = visibleAccidentPeriod + DrawFromDict(DICT_ACCIDENT_MARGIN_DICT.Item(Sheets(season & "_投手データ").Cells(rowIdx, "E").Value))
+                ' スペ内容抽選
+                
+                ' ファイル書き込み
+                
+            ElseIf Sheets(season & "_投手データ").Cells(rowIdx, 282 + gamesBeforeThisSection).Value <> "" And Sheets(season & "_投手データ").Cells(rowIdx, 282 + gamesAfterThisSection).Value = "" Then
+                ' 復帰
+                
+            End If
+            
+        Next rowIdx
+        
+        ' 野手スペ判定
+        For rowIdx = 4 To 50
+        
+            If Sheets(season & "_野手データ").Cells(rowIdx, "A").Value = "" Then
+                Exit For
+            End If
+        
+            ' 基礎スペ率*スペ査定係数での抽選 ※既にケガしている場合は対象外
+            If Sheets(season & "_野手データ").Cells(rowIdx, 236 + gamesAfterThisSection).Value = "" Then
+                Randomize
+                dice = Rnd()
+            Else
+                dice = 1
+            End If
+            If dice < teamBasedAccidentRate * DICT_ACCIDENT_COEFFICIENT.Item(Sheets(season & "_野手データ").Cells(rowIdx, "E").Value) Then
+                ' スペ長さ(表)抽選
+                visibleAccidentPeriod = DrawFromDict(DICT_ACCIDENT_LENGTH_RATE)
+                ' スペ長さ(裏)抽選
+                hiddenAccidentPeriod = visibleAccidentPeriod + DrawFromDict(DICT_ACCIDENT_MARGIN_DICT.Item(Sheets(season & "_野手データ").Cells(rowIdx, "E").Value))
+                ' スペ内容抽選
+                
+                ' ファイル書き込み
+                
+            ElseIf Sheets(season & "_野手データ").Cells(rowIdx, 236 + gamesBeforeThisSection).Value <> "" And Sheets(season & "_野手データ").Cells(rowIdx, 236 + gamesAfterThisSection).Value = "" Then
+                ' 復帰
+                
+            End If
+        
+        Next rowIdx
+        
+    Next teamID
+    teamID = Nothing
+    rowIdx = Nothing
+    dice = Nothing
+    
+    ' 結果の出力
+    If mpbNewsOfAccidentFlg Then
+        If Not debugModeFlg Then
+            Call OutputText(mpbNewsOfAccident, MPB_WORK_DIRECTORY_PATH & "\mpbnews-accident.txt")
+        Else
+            Call MessageInfo(mpbNewsOfAccident, "MakeMPBNewsOfAccident")
+        End If
+    End If
+    
 End Function
 
 ' 次節日程調整の依頼を出力
