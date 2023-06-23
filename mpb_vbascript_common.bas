@@ -59,8 +59,38 @@ Public Function IsCareerDataSheet() As Boolean
     
 End Function
 
+' 改行して追記
+Public Function AddRowText(baseText As String, addText As String)
+
+    AddRowText = baseText & vbCrLf & _
+                 addText
+
+End Function
+
+' 抽選
+Public Function DrawFromDict(dict As Dictionary)
+    
+    Dim dKey
+    Dim dVal As Long
+    Dim dice As Long
+    
+    dVal = 0
+    Randomize
+    dice = Rnd() * WorksheetFunction.Sum(dict.Items)
+    
+    For Each dKey In dict.Keys
+        dVal = dVal + dict.Item(dKey)
+        
+        If dice < dVal Then
+            DrawFromDict = dKey
+            Exit Function
+        End If
+    Next
+    
+End Function
+
 ' テキストファイルの出力
-Public Function outputText(text As String, path As String)
+Public Function OutputText(text As String, path As String)
 
     Dim fileNumber As Integer
     fileNumber = FreeFile
@@ -72,11 +102,11 @@ Public Function outputText(text As String, path As String)
 End Function
 
 ' 画像ファイルの出力
-Public Function outputPicture(pictureRange As range, path As String)
+Public Function OutputPicture(pictureRange As Range, path As String)
     
     If Dir(path) <> "" Then
-        Call MessageError("画像配置不可エラー", "outputPicture")
-        End
+        Call MessageError("画像配置不可エラー", "OutputPicture")
+        Exit Function
     End If
     
     Dim pictureRangeTmp As ChartObject
