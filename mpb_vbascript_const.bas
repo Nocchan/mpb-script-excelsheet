@@ -6,6 +6,9 @@ Option Explicit
 ' Googleドライブのパス
 Public MPB_WORK_DIRECTORY_PATH As String
 
+' ローカル動確時のパス
+Public LOCAL_WORK_DIRECTORY_PATH As String
+
 ' 球団略称→球団名
 Public DICT_TEAMNAME As New Dictionary
 
@@ -53,6 +56,7 @@ Public DICT_ACCIDENT_INFORMATION_FIELDER_24 As New Dictionary
 Public Function Definition()
 
     MPB_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\マイドライブ\MPB\1-まる"
+    LOCAL_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\Desktop\MPB\1-まる"
     
     With DICT_TEAMNAME
         .Add "G", "ジャイアンツ"
@@ -65,7 +69,7 @@ Public Function Definition()
     BASE_ACCIDENT_RATE = 0.01
     
     With DICT_ACCIDENT_HDCP
-        .Add "G", 1#
+        .Add "G", 5#
         .Add "M", 1#
         .Add "T", 1#
         .Add "L", 1#
@@ -85,11 +89,11 @@ Public Function Definition()
     End With
     
     With DICT_ACCIDENT_LENGTH_RATE
-        .Add 1, 30#
-        .Add 2, 49#
-        .Add 5, 10.5
-        .Add 8, 7
-        .Add 24, 3.5
+        .Add 1, 36#
+        .Add 2, 40#
+        .Add 5, 12#
+        .Add 8, 8#
+        .Add 24, 4#
     End With
     
     With DICT_ACCIDENT_MARGIN_DICT

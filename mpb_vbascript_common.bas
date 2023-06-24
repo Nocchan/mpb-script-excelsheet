@@ -111,18 +111,13 @@ Public Function OutputText(text As String, path As String)
     fileNumber = FreeFile
     
     Open path For Output As fileNumber
-        Print fileNumber, text;
+        Print #fileNumber, text;
     Close fileNumber
 
 End Function
 
 ' 画像ファイルの出力
 Public Function OutputPicture(pictureRange As Range, path As String)
-    
-    If Dir(path) <> "" Then
-        Call MessageError("画像配置不可エラー", "OutputPicture")
-        Exit Function
-    End If
     
     Dim pictureRangeTmp As ChartObject
     Dim minFileSize As Long

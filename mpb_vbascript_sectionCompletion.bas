@@ -1,11 +1,5 @@
 Attribute VB_Name = "mpb_vbascript_sectionCompletion"
 Sub アクシデント発生()
-
-    Dim debugModeFlg As Boolean
-    debugModeFlg = False
-    If debugModeFlg Then
-        MsgBox "デバッグモード"
-    End If
     
     ' エラーチェック
     If ActiveSheet.Name <> ActiveSheet.Cells(1, "A").Value & "_スケジュール" Then
