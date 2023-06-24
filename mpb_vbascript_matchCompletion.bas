@@ -223,7 +223,7 @@ End Function
 Function MakeMPBNewsOfThisSection()
     
     ' 実行条件
-    If section = 0 Then
+    If section = 0 Or True Then
         Exit Function
     End If
     
@@ -233,11 +233,11 @@ Function MakeMPBNewsOfThisSection()
     Dim seasonStatus As New Dictionary
     
     ' 初期化
-    mpbNewsSeasonOfThisSectionFlg = False
-    mpbNewsSeasonOfThisSection = "【MPBニュース】"
+    mpbNewsOfThisSectionFlg = False
+    mpbNewsOfThisSection = "【MPBニュース】"
     
     ' 状況確認(今節実施前)
-    seasonStatus.Add "今節実施前", CheckSeasonStatus(section - 1)
+    seasonStatus.Add "今節実施前", CheckSeasonStatus(section - 1, [["","",""],["","",""]])
     
     ' 今節実施前に優勝が決まっている場合はスキップ
     If seasonStatus.Item("今節実施前")(0) <> "" Then
@@ -245,7 +245,7 @@ Function MakeMPBNewsOfThisSection()
     End If
     
     ' 状況確認(今節実施後)
-    seasonStatus.Add "今節実施後", CheckSeasonStatus(section)
+    seasonStatus.Add "今節実施後", CheckSeasonStatus(section, [["","",""],["","",""]])
     
     ' 次節を考える必要がない場合
     If seasonStatus.Item("今節実施後")(0) <> "" Or section = 30 Then
@@ -279,7 +279,7 @@ Function MakeMPBNewsOfThisSection()
     
 End Function
 
-Function CheckSeasonStatus(sectionNumber As Integer, Optional ByRef score As String) As String()
+Function CheckSeasonStatus(sectionNumber As Integer, ByRef score As String) As String()
     
     Dim tmp(2) As String
     Dim resultArray(5) As String
@@ -348,7 +348,7 @@ Function MakeMPBNewsOfAccident()
     Dim mpbNewsOfAccident As String
     Dim gamesBeforeThisSection As Integer
     Dim gamesAfterThisSection As Integer
-    Dim teamBasedAccidentRate As Long
+    Dim teamBasedAccidentRate As Single
     
     ' 初期化
     mpbNewsOfAccidentFlg = False
@@ -359,9 +359,11 @@ Function MakeMPBNewsOfAccident()
     
     Dim teamID As Integer
     Dim rowIdx As Integer
+    Dim columnIdx As Integer
     Dim dice As Single
     Dim visibleAccidentPeriod As Integer
     Dim hiddenAccidentPeriod As Integer
+    Dim accidentInformation As String
     Dim accidentInformationFile As String
     Dim accidentInformationNews As String
     For teamID = 1 To 5
@@ -372,11 +374,15 @@ Function MakeMPBNewsOfAccident()
         End If
         gamesAfterThisSection = Sheets(season & "_スケジュール").Cells(2 + section, 83 + teamID)
         
-        ' 基礎スペ率=(BASE_ACCIDENT_RATE)*(ヤ戦病院適用分)*(試合進行係数88.5-111.5%)
+        ' 基礎スペ率=(BASE_ACCIDENT_RATE)*(ヤ戦病院適用分)*(試合進行係数88.5-111.5%) ※試合していない場合はゼロ
         teamBasedAccidentRate = BASE_ACCIDENT_RATE * DICT_ACCIDENT_HDCP.Item(dictTeamID.Item(teamID)) * (0.885 + (gamesAfterThisSection * 0.01))
+        If gamesBeforeThisSection = gamesAfterThisSection Then
+            teamBasedAccidentRate = 0
+        End If
+        Call MessageInfo(dictTeamID.Item(teamID) & " : teamBasedAccidentRate = " & teamBasedAccidentRate * 100 & "%", "MakeMPBNewsOfAccident")
         
         ' 投手スペ判定
-        For rowIdx = 4 To 50
+        For rowIdx = 4 + 50 * (teamID - 1) To 50 * teamID
         
             If Sheets(season & "_投手データ").Cells(rowIdx, "A").Value = "" Then
                 Exit For
@@ -390,23 +396,44 @@ Function MakeMPBNewsOfAccident()
                 dice = 1
             End If
             If dice < teamBasedAccidentRate * DICT_ACCIDENT_COEFFICIENT.Item(Sheets(season & "_投手データ").Cells(rowIdx, "E").Value) Then
+                
                 ' スペ長さ(表)抽選
                 visibleAccidentPeriod = DrawFromDict(DICT_ACCIDENT_LENGTH_RATE)
-                ' スペ長さ(裏)抽選
+                
+                ' スペ長さ(裏)抽選 ※長さゼロにはならない
                 hiddenAccidentPeriod = visibleAccidentPeriod + DrawFromDict(DICT_ACCIDENT_MARGIN_DICT.Item(Sheets(season & "_投手データ").Cells(rowIdx, "E").Value))
+                If hiddenAccidentPeriod = 0 Then
+                    hiddenAccidentPeriod = 1
+                End If
+                
                 ' スペ内容抽選
+                accidentInformation = DrawFromDict(DICT_ACCIDENT_INFORMATION_PITCHER_DICT.Item(visibleAccidentPeriod))
+                accidentInformationFile = Split(accidentInformation, "_")(0)
+                accidentInformationNews = Split(accidentInformation, "_")(1)
+                mpbNewsOfAccident = AddRowText(mpbNewsOfAccident, "◇" & DICT_TEAMNAME.Item(dictTeamID.Item(teamID)) & "◇" & Sheets(season & "_投手データ").Cells(rowIdx, "D").Value & "選手が" & accidentInformationNews)
+                mpbNewsOfAccidentFlg = True
                 
                 ' ファイル書き込み
-                
+                For columnIdx = 282 + gamesAfterThisSection To 282 + gamesAfterThisSection + hiddenAccidentPeriod - 1
+                    If columnIdx > 305 Then
+                        Exit For
+                    End If
+                    Call MessageDebug(Sheets(season & "_投手データ").Cells(rowIdx, "D").Value & ":" & accidentInformationFile & "(" & visibleAccidentPeriod & ")", "INPUT 投手データ.Cells(" & rowIdx & "," & columnIdx & ")")
+                    Sheets(season & "_投手データ").Cells(rowIdx, columnIdx).Value = Sheets(season & "_投手データ").Cells(rowIdx, "D").Value & ":" & accidentInformationFile & "(" & visibleAccidentPeriod & ")"
+                Next columnIdx
+            
             ElseIf Sheets(season & "_投手データ").Cells(rowIdx, 282 + gamesBeforeThisSection).Value <> "" And Sheets(season & "_投手データ").Cells(rowIdx, 282 + gamesAfterThisSection).Value = "" Then
+                
                 ' 復帰
+                mpbNewsOfAccident = AddRowText(mpbNewsOfAccident, "◇" & DICT_TEAMNAME.Item(dictTeamID.Item(teamID)) & "◇離脱中の" & Sheets(season & "_投手データ").Cells(rowIdx, "D").Value & "選手について、次節からの戦列復帰が明言されました。")
+                mpbNewsOfAccidentFlg = True
                 
             End If
             
         Next rowIdx
         
         ' 野手スペ判定
-        For rowIdx = 4 To 50
+        For rowIdx = 4 + 50 * (teamID - 1) To 50 * teamID
         
             If Sheets(season & "_野手データ").Cells(rowIdx, "A").Value = "" Then
                 Exit For
@@ -420,16 +447,38 @@ Function MakeMPBNewsOfAccident()
                 dice = 1
             End If
             If dice < teamBasedAccidentRate * DICT_ACCIDENT_COEFFICIENT.Item(Sheets(season & "_野手データ").Cells(rowIdx, "E").Value) Then
+                
                 ' スペ長さ(表)抽選
                 visibleAccidentPeriod = DrawFromDict(DICT_ACCIDENT_LENGTH_RATE)
-                ' スペ長さ(裏)抽選
+                
+                ' スペ長さ(裏)抽選 ※長さゼロにはならない
                 hiddenAccidentPeriod = visibleAccidentPeriod + DrawFromDict(DICT_ACCIDENT_MARGIN_DICT.Item(Sheets(season & "_野手データ").Cells(rowIdx, "E").Value))
+                If hiddenAccidentPeriod = 0 Then
+                    hiddenAccidentPeriod = 1
+                End If
+                
                 ' スペ内容抽選
+                accidentInformation = DrawFromDict(DICT_ACCIDENT_INFORMATION_FIELDER_DICT.Item(visibleAccidentPeriod))
+                accidentInformationFile = Split(accidentInformation, "_")(0)
+                accidentInformationNews = Split(accidentInformation, "_")(1)
+                mpbNewsOfAccident = AddRowText(mpbNewsOfAccident, "◇" & DICT_TEAMNAME.Item(dictTeamID.Item(teamID)) & "◇" & Sheets(season & "_野手データ").Cells(rowIdx, "D").Value & "選手が" & accidentInformationNews)
+                mpbNewsOfAccidentFlg = True
                 
                 ' ファイル書き込み
+                For columnIdx = 236 + gamesAfterThisSection To 236 + gamesAfterThisSection + hiddenAccidentPeriod - 1
+                    If columnIdx > 259 Then
+                        Exit For
+                    End If
+                    Call MessageDebug(Sheets(season & "_野手データ").Cells(rowIdx, "D").Value & ":" & accidentInformationFile & "(" & visibleAccidentPeriod & ")", "INPUT 野手データ.Cells(" & rowIdx & "," & columnIdx & ")")
+                    Sheets(season & "_野手データ").Cells(rowIdx, columnIdx).Value = Sheets(season & "_野手データ").Cells(rowIdx, "D").Value & ":" & accidentInformationFile & "(" & visibleAccidentPeriod & ")"
+                Next columnIdx
+                
                 
             ElseIf Sheets(season & "_野手データ").Cells(rowIdx, 236 + gamesBeforeThisSection).Value <> "" And Sheets(season & "_野手データ").Cells(rowIdx, 236 + gamesAfterThisSection).Value = "" Then
+
                 ' 復帰
+                mpbNewsOfAccident = AddRowText(mpbNewsOfAccident, "◇" & DICT_TEAMNAME.Item(dictTeamID.Item(teamID)) & "◇離脱中の" & Sheets(season & "_野手データ").Cells(rowIdx, "D").Value & "選手について、次節からの戦列復帰が明言されました。")
+                mpbNewsOfAccidentFlg = True
                 
             End If
         

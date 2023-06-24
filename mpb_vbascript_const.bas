@@ -10,7 +10,7 @@ Public MPB_WORK_DIRECTORY_PATH As String
 Public DICT_TEAMNAME As New Dictionary
 
 ' 基礎スペ率
-Public BASE_ACCIDENT_RATE As Long
+Public BASE_ACCIDENT_RATE As Single
 
 ' 球団略称→ヤ戦病院適用分
 Public DICT_ACCIDENT_HDCP As New Dictionary
@@ -31,7 +31,24 @@ Public DICT_ACCIDENT_MARGIN_D As New Dictionary
 Public DICT_ACCIDENT_MARGIN_E As New Dictionary
 Public DICT_ACCIDENT_MARGIN_F As New Dictionary
 Public DICT_ACCIDENT_MARGIN_G As New Dictionary
-Public DICT_ACCIDENT_MARGIN_n As New Dictionary
+
+' 投手スペ内容抽選用二次元辞書
+' ファイル出力を 選手名:XXX(2) 、MPBニュース出力を ◇チーム名◇選手名がYYY。 とする場合に XXX_YYY 形式で記述
+Public DICT_ACCIDENT_INFORMATION_PITCHER_DICT As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_PITCHER_1 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_PITCHER_2 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_PITCHER_5 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_PITCHER_8 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_PITCHER_24 As New Dictionary
+
+' 野手スペ内容抽選用二次元辞書
+' ファイル出力を "選手名:XXX(2)" 、MPBニュース出力を "◇チーム名◇選手名がYYY。" とする場合に XXX_YYY 形式で記述
+Public DICT_ACCIDENT_INFORMATION_FIELDER_DICT As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_FIELDER_1 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_FIELDER_2 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_FIELDER_5 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_FIELDER_8 As New Dictionary
+Public DICT_ACCIDENT_INFORMATION_FIELDER_24 As New Dictionary
 
 Public Function Definition()
 
@@ -153,5 +170,61 @@ Public Function Definition()
         .Add 6, 2.14
         .Add 7, 1.07
     End With
+    
+    With DICT_ACCIDENT_INFORMATION_PITCHER_DICT
+        .Add 1, DICT_ACCIDENT_INFORMATION_PITCHER_1
+        .Add 2, DICT_ACCIDENT_INFORMATION_PITCHER_2
+        .Add 5, DICT_ACCIDENT_INFORMATION_PITCHER_5
+        .Add 8, DICT_ACCIDENT_INFORMATION_PITCHER_8
+        .Add 24, DICT_ACCIDENT_INFORMATION_PITCHER_24
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_PITCHER_1
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_PITCHER_2
+        .Add "_", 1
+    End With
 
+    With DICT_ACCIDENT_INFORMATION_PITCHER_5
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_PITCHER_8
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_PITCHER_24
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_FIELDER_DICT
+        .Add 1, DICT_ACCIDENT_INFORMATION_FIELDER_1
+        .Add 2, DICT_ACCIDENT_INFORMATION_FIELDER_2
+        .Add 5, DICT_ACCIDENT_INFORMATION_FIELDER_5
+        .Add 8, DICT_ACCIDENT_INFORMATION_FIELDER_8
+        .Add 24, DICT_ACCIDENT_INFORMATION_FIELDER_24
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_FIELDER_1
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_FIELDER_2
+        .Add "_", 1
+    End With
+
+    With DICT_ACCIDENT_INFORMATION_FIELDER_5
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_FIELDER_8
+        .Add "_", 1
+    End With
+    
+    With DICT_ACCIDENT_INFORMATION_FIELDER_24
+        .Add "_", 1
+    End With
+    
 End Function

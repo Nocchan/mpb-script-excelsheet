@@ -1,11 +1,26 @@
 Attribute VB_Name = "mpb_vbascript_common"
+Option Explicit
+
 Public debugModeFlg As Boolean
+
+' Debugレベルのメッセージ
+Public Function MessageDebug(message As String, Optional title As String = "")
+    
+    If Not debugModeFlg Then
+        Exit Function
+    End If
+    
+    MsgBox message, _
+           vbInformation, _
+           "[DEBUG] " & title
+
+End Function
 
 ' Infoレベルのメッセージ
 Public Function MessageInfo(message As String, Optional title As String = "")
 
     MsgBox message, _
-           vbInformation, _
+           vbExclamation, _
            "[INFO] " & title
 
 End Function
@@ -71,8 +86,8 @@ End Function
 Public Function DrawFromDict(dict As Dictionary)
     
     Dim dKey
-    Dim dVal As Long
-    Dim dice As Long
+    Dim dVal As Single
+    Dim dice As Single
     
     dVal = 0
     Randomize
