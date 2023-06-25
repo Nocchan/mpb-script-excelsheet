@@ -36,7 +36,7 @@ Public DICT_ACCIDENT_MARGIN_F As New Dictionary
 Public DICT_ACCIDENT_MARGIN_G As New Dictionary
 
 ' 投手スペ内容抽選用二次元辞書
-' ファイル出力を 選手名:XXX(2) 、MPBニュース出力を ◇チーム名◇選手名がYYY。 とする場合に XXX_YYY 形式で記述
+' MPBニュース出力を ◇チーム名◇選手名選手XXX とする場合の XXX を定義
 Public DICT_ACCIDENT_INFORMATION_PITCHER_DICT As New Dictionary
 Public DICT_ACCIDENT_INFORMATION_PITCHER_1 As New Dictionary
 Public DICT_ACCIDENT_INFORMATION_PITCHER_2 As New Dictionary
@@ -45,7 +45,7 @@ Public DICT_ACCIDENT_INFORMATION_PITCHER_8 As New Dictionary
 Public DICT_ACCIDENT_INFORMATION_PITCHER_24 As New Dictionary
 
 ' 野手スペ内容抽選用二次元辞書
-' ファイル出力を "選手名:XXX(2)" 、MPBニュース出力を "◇チーム名◇選手名がYYY。" とする場合に XXX_YYY 形式で記述
+' MPBニュース出力を ◇チーム名◇選手名選手XXX とする場合の XXX を定義
 Public DICT_ACCIDENT_INFORMATION_FIELDER_DICT As New Dictionary
 Public DICT_ACCIDENT_INFORMATION_FIELDER_1 As New Dictionary
 Public DICT_ACCIDENT_INFORMATION_FIELDER_2 As New Dictionary
@@ -69,7 +69,7 @@ Public Function Definition()
     BASE_ACCIDENT_RATE = 0.01
     
     With DICT_ACCIDENT_HDCP
-        .Add "G", 5#
+        .Add "G", 1#
         .Add "M", 1#
         .Add "T", 1#
         .Add "L", 1#
@@ -184,23 +184,45 @@ Public Function Definition()
     End With
     
     With DICT_ACCIDENT_INFORMATION_PITCHER_1
-        .Add "_", 1
+        .Add "選手が、再調整のため、次節は一度ベンチから外れるとのことです。", 1
+        .Add "選手は、上肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、下肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、練習中に肘の違和感を訴えたため、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、練習中に肩の違和感を訴えたため、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、練習中に腰の違和感を訴えたため、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手に、ピッチャーライナーを受けるアクシデント。念のため次節はベンチから外れるとのことです。", 1
+        .Add "選手は、指にできたマメの影響で、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、体調不良のため、コロナ特例で登録抹消されました。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_PITCHER_2
-        .Add "_", 1
+        .Add "選手が上肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が下肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が肘の違和感を訴えたとのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が肩の違和感を訴えたとのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が腰の違和感を訴えたとのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手の指にマメができたとのこと。抹消は行わず、様子を見る方針です。", 1
     End With
 
     With DICT_ACCIDENT_INFORMATION_PITCHER_5
-        .Add "_", 1
+        .Add "選手が上肢のコンディション不良とのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が下肢のコンディション不良とのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が肘の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が肩の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が腰の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_PITCHER_8
-        .Add "_", 1
+        .Add "選手は、上肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、下肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、肘の違和感を訴えたため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、肩の違和感を訴えたため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、腰痛のため、登録抹消し、治療に専念するとのことです。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_PITCHER_24
-        .Add "_", 1
+        .Add "選手が、直近の登板の際に肘を痛め、緊急降板。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
+        .Add "選手が、直近の登板の際に肩を痛め、緊急降板。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_FIELDER_DICT
@@ -212,23 +234,45 @@ Public Function Definition()
     End With
     
     With DICT_ACCIDENT_INFORMATION_FIELDER_1
-        .Add "_", 1
+        .Add "選手が、再調整のため、次節は一度ベンチから外れるとのことです。", 1
+        .Add "選手は、上肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、下肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、練習中に太ももの違和感を訴えたため、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、練習中に腰の違和感を訴えたため、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、死球による打撲の影響で、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、走塁中のアクシデントの影響で、念のため次節のベンチから外れるとのことです。", 1
+        .Add "選手は、体調不良を訴えたため、コロナ特例で登録抹消されました。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_FIELDER_2
-        .Add "_", 1
+        .Add "選手が上肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が下肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が太ももの違和感を訴えたとのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が腰の違和感を訴えたとのこと。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手は、死球を受け市内の病院を受診。抹消は行わず、様子を見る方針です。", 1
+        .Add "選手が、走塁中のアクシデントで途中交代しました。抹消は行わず、様子を見る方針です。", 1
     End With
 
     With DICT_ACCIDENT_INFORMATION_FIELDER_5
-        .Add "_", 1
+        .Add "選手が上肢のコンディション不良とのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が下肢のコンディション不良とのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が太ももの違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が腰の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
+        .Add "選手は、死球を受け市内の病院を受診。一度抹消し、様子を見る方針です。", 1
+        .Add "選手が、走塁中のアクシデントで途中交代しました。一度抹消し、様子を見る方針です。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_FIELDER_8
-        .Add "_", 1
+        .Add "選手は、上肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、下肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、腰痛のため、登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、死球を受け骨折。登録抹消し、治療に専念するとのことです。", 1
+        .Add "選手は、走塁中のアクシデントで途中交代、肉離れと診断。登録抹消し、治療に専念するとのことです。", 1
     End With
     
     With DICT_ACCIDENT_INFORMATION_FIELDER_24
-        .Add "_", 1
+        .Add "選手が、守備の際に膝を痛め病院に直行。前十字靭帯損傷と診断されました。今シーズン中の復帰は絶望的とみられます。", 1
+        .Add "選手は、腰痛を訴え病院を受診したところ、椎間板ヘルニアと診断されました。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
     End With
     
 End Function

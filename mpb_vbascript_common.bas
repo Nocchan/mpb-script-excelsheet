@@ -123,7 +123,7 @@ Public Function OutputPicture(pictureRange As Range, path As String)
     Dim minFileSize As Long
     
     pictureRange.CopyPicture
-    Set pictureRangeTmp = Sheets("アクシデント").ChartObjects.Add(0, 0, pictureRange.Width, pictureRange.Height)
+    Set pictureRangeTmp = Sheets("(tmp)").ChartObjects.Add(0, 0, pictureRange.Width, pictureRange.Height)
     pictureRangeTmp.Chart.Export path
     minFileSize = FileLen(path)
     
