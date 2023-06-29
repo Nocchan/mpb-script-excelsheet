@@ -57,7 +57,7 @@ Public Function Definition()
 
     MPB_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\マイドライブ\MPB\1-まる"
     LOCAL_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\Desktop\MPB\1-まる"
-    
+
     With DICT_TEAM_NAME
         .Add "G", "ジャイアンツ"
         .Add "M", "マリーンズ"
@@ -65,9 +65,9 @@ Public Function Definition()
         .Add "L", "ライオンズ"
         .Add "E", "イーグルス"
     End With
-    
+
     BASE_ACCIDENT_RATE = 0.01
-    
+
     With DICT_ACCIDENT_HDCP
         .Add "G", 1#
         .Add "M", 1#
@@ -75,7 +75,7 @@ Public Function Definition()
         .Add "L", 1#
         .Add "E", 1#
     End With
-    
+
     With DICT_ACCIDENT_COEFFICIENT
         .Add "S", 0.01
         .Add "A", 0.3
@@ -87,7 +87,7 @@ Public Function Definition()
         .Add "G", 4#
         .Add "n", 0#
     End With
-    
+
     With DICT_ACCIDENT_LENGTH_RATE
         .Add 1, 36#
         .Add 2, 40#
@@ -95,7 +95,7 @@ Public Function Definition()
         .Add 8, 8#
         .Add 24, 4#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_DICT
         .Add "S", DICT_ACCIDENT_MARGIN_S
         .Add "A", DICT_ACCIDENT_MARGIN_A
@@ -106,25 +106,25 @@ Public Function Definition()
         .Add "F", DICT_ACCIDENT_MARGIN_F
         .Add "G", DICT_ACCIDENT_MARGIN_G
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_S
         .Add -1, 30#
         .Add 0, 70#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_A
         .Add -1, 30#
         .Add 0, 40#
         .Add 1, 30#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_B
         .Add -1, 30#
         .Add 0, 40#
         .Add 1, 20#
         .Add 2, 10#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_C
         .Add -1, 30#
         .Add 0, 40#
@@ -132,7 +132,7 @@ Public Function Definition()
         .Add 2, 10#
         .Add 3, 5#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_D
         .Add -1, 30#
         .Add 0, 40#
@@ -141,7 +141,7 @@ Public Function Definition()
         .Add 3, 6#
         .Add 4, 3#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_E
         .Add -1, 30#
         .Add 0, 40#
@@ -151,7 +151,7 @@ Public Function Definition()
         .Add 4, 4#
         .Add 5, 2#
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_F
         .Add -1, 30#
         .Add 0, 40#
@@ -162,7 +162,7 @@ Public Function Definition()
         .Add 5, 2.86
         .Add 6, 1.43
     End With
-    
+
     With DICT_ACCIDENT_MARGIN_G
         .Add -1, 30#
         .Add 0, 40#
@@ -174,7 +174,7 @@ Public Function Definition()
         .Add 6, 2.14
         .Add 7, 1.07
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_PITCHER_DICT
         .Add 1, DICT_ACCIDENT_INFORMATION_PITCHER_1
         .Add 2, DICT_ACCIDENT_INFORMATION_PITCHER_2
@@ -182,7 +182,7 @@ Public Function Definition()
         .Add 8, DICT_ACCIDENT_INFORMATION_PITCHER_8
         .Add 24, DICT_ACCIDENT_INFORMATION_PITCHER_24
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_PITCHER_1
         .Add "選手が、再調整のため、次節は一度ベンチから外れるとのことです。", 1
         .Add "選手は、上肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
@@ -194,7 +194,7 @@ Public Function Definition()
         .Add "選手は、指にできたマメの影響で、念のため次節のベンチから外れるとのことです。", 1
         .Add "選手は、体調不良のため、コロナ特例で登録抹消されました。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_PITCHER_2
         .Add "選手が上肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
         .Add "選手が下肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
@@ -211,7 +211,7 @@ Public Function Definition()
         .Add "選手が肩の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
         .Add "選手が腰の違和感を訴えたとのこと。一度抹消し、様子を見る方針です。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_PITCHER_8
         .Add "選手は、上肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
         .Add "選手は、下肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
@@ -219,12 +219,12 @@ Public Function Definition()
         .Add "選手は、肩の違和感を訴えたため、登録抹消し、治療に専念するとのことです。", 1
         .Add "選手は、腰痛のため、登録抹消し、治療に専念するとのことです。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_PITCHER_24
         .Add "選手が、直近の登板の際に肘を痛め、緊急降板。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
         .Add "選手が、直近の登板の際に肩を痛め、緊急降板。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_FIELDER_DICT
         .Add 1, DICT_ACCIDENT_INFORMATION_FIELDER_1
         .Add 2, DICT_ACCIDENT_INFORMATION_FIELDER_2
@@ -232,7 +232,7 @@ Public Function Definition()
         .Add 8, DICT_ACCIDENT_INFORMATION_FIELDER_8
         .Add 24, DICT_ACCIDENT_INFORMATION_FIELDER_24
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_FIELDER_1
         .Add "選手が、再調整のため、次節は一度ベンチから外れるとのことです。", 1
         .Add "選手は、上肢のコンディション不良により、念のため次節のベンチから外れるとのことです。", 1
@@ -243,7 +243,7 @@ Public Function Definition()
         .Add "選手は、走塁中のアクシデントの影響で、念のため次節のベンチから外れるとのことです。", 1
         .Add "選手は、体調不良を訴えたため、コロナ特例で登録抹消されました。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_FIELDER_2
         .Add "選手が上肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
         .Add "選手が下肢のコンディション不良とのこと。抹消は行わず、様子を見る方針です。", 1
@@ -261,7 +261,7 @@ Public Function Definition()
         .Add "選手は、死球を受け市内の病院を受診。一度抹消し、様子を見る方針です。", 1
         .Add "選手が、走塁中のアクシデントで途中交代しました。一度抹消し、様子を見る方針です。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_FIELDER_8
         .Add "選手は、上肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
         .Add "選手は、下肢のコンディション不良のため、登録抹消し、治療に専念するとのことです。", 1
@@ -269,10 +269,10 @@ Public Function Definition()
         .Add "選手は、死球を受け骨折。登録抹消し、治療に専念するとのことです。", 1
         .Add "選手は、走塁中のアクシデントで途中交代、肉離れと診断。登録抹消し、治療に専念するとのことです。", 1
     End With
-    
+
     With DICT_ACCIDENT_INFORMATION_FIELDER_24
         .Add "選手が、守備の際に膝を痛め病院に直行。前十字靭帯損傷と診断されました。今シーズン中の復帰は絶望的とみられます。", 1
         .Add "選手は、腰痛を訴え病院を受診したところ、椎間板ヘルニアと診断されました。近日中に手術を行うとのことで、今シーズン中の復帰は絶望的とみられます。", 1
     End With
-    
+
 End Function

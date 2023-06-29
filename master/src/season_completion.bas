@@ -8,9 +8,9 @@ Sub スペ状況リセット()
     End If
 
     Application.ScreenUpdating = False
-    
+
     seasonName = ActiveSheet.Cells(1, "A")
-    
+
     With Sheets(seasonName & "_投手データ")
         .Unprotect
         .Range("JV4:KS50").ClearContents
@@ -20,7 +20,7 @@ Sub スペ状況リセット()
         .Range("JV204:KS250").ClearContents
         .Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
     End With
-    
+
     With Sheets(seasonName & "_野手データ")
         .Unprotect
         .Range("IB4:IY50").ClearContents
@@ -30,7 +30,7 @@ Sub スペ状況リセット()
         .Range("IB204:IY250").ClearContents
         .Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
     End With
-        
+
     Application.ScreenUpdating = True
 
 End Sub
