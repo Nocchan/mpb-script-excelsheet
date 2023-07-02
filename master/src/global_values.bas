@@ -55,8 +55,8 @@ Public DICT_ACCIDENT_INFORMATION_FIELDER_24 As New Dictionary
 
 Public Function Definition()
 
-    MPB_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\マイドライブ\MPB\1-まる"
-    LOCAL_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\Desktop\MPB\1-まる"
+    MPB_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\マイドライブ\MPB\maru"
+    LOCAL_WORK_DIRECTORY_PATH = "C:\Users\TaiNo\Desktop\MPB\maru"
 
     With DICT_TEAM_NAME
         .Add "G", "ジャイアンツ"
