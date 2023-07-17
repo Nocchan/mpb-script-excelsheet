@@ -157,19 +157,42 @@ Function makeMPBNewsSeasonEvent()
     End If
 
     ' HDCP変更受付開始
-    If section = 10 Or section = 20 Then
+    If section = 10 Then
         existMPBNewsSeasonEvent = True
 
         bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
-        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・只今より、後半戦からのHDCP変更受付を開始します。第15節終了をもって締め切るので、変更したいチームは、必要に応じて申請を行ってください。変更しない場合は、特に対応不要です。")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・只今より、後半戦からのHDCP変更受付を開始します。第13節終了をもって締め切るので、変更したいチームは、必要に応じて申請を行ってください。変更しない場合は、特に対応不要です。")
     End If
 
     ' HDCP変更中
-    If section = 11 Or section = 12 Or section = 13 Or section = 14 Then
+    If section = 11 or section = 12 Then
         existMPBNewsSeasonEvent = True
 
         bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
-        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・後半戦からのHDCP変更を受付中です。変更したいチームは、第15節終了までに申請を行ってください。")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・後半戦からのHDCP変更を受付中です。変更したいチームは、第13節終了までに申請を行ってください。")
+    End If
+
+    ' HDCP変更受付〆
+    If section = 13 Then
+        existMPBNewsSeasonEvent = True
+
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・只今をもちまして、後半戦に向けたHDCP変更の申請を締め切ります。")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・対象チームが選択した、後半戦のHDCPを発表します。")
+        ' 発表内容をここに記述
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "G: 9.0 (※飲酒可能な場合)")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.0/サブポジ×(投手)")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.0/ルール選択権-2.0")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.5/TSOB枠-1.5")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.5/飲酒")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "G: 9.0 (※飲酒不可能な場合)")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.0/単打育成プログラム+1")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.0/サブポジ×(投手)")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.0/ルール選択権-2.0")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 2.5/TSOB枠-1.5")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 0.5/不調")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "T: 0.5")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, " 0.5/不調")
     End If
 
     ' HDCP変更受付〆
@@ -177,7 +200,7 @@ Function makeMPBNewsSeasonEvent()
         existMPBNewsSeasonEvent = True
 
         bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
-        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・只今をもちまして、後半戦に向けたHDCP変更の申請を締め切ります。HDCPの表示設定を最新化してください。")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・只今より、HDCPを後半戦のものに変更します。シートの表示内容を修正してください。")
     End If
 
     ' B9GG提出受付開始
@@ -209,7 +232,7 @@ Function makeMPBNewsSeasonEvent()
         existMPBNewsSeasonEvent = True
 
         bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
-        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・今シーズン、予定されていた全日程が終了しました。まずは、皆さんお疲れさまでした！この後、MPBアワードを実施しますので、案内をお待ちください。")
+        bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "・今シーズン、予定されていた全日程が終了しました。まずは、皆さんお疲れさまでした!!この後、MPBアワードを実施しますので、案内をお待ちください。")
     End If
 
     ' 結果の出力
@@ -254,7 +277,7 @@ Function makeMPBNewsOfThisSection()
     messageTemplateSelfVictoryDisappearance = "自力優勝が消滅…"
     messageTemplateSelfVictoryReappearance = "自力優勝が復活！"
     messageTemplateMagicAppearance = "優勝マジックが点灯！"
-    
+
     ' 今節の試合結果
     If section > 0 Then
         scoreOfThisSection(1, 1) = Sheets(season & "_スケジュール").Cells(section * 8 - 6, "C").Value
@@ -291,7 +314,7 @@ Function makeMPBNewsOfThisSection()
     If seasonStatus.Item("今節実施前")(0) = "" Then
 
         seasonStatus.Add "今節実施後", seasonStatusOfSection(section, scoreOfThisSection(1, 2), Sheets(season & "_スケジュール").Cells(section * 8 - 5, "F").Value, scoreOfThisSection(1, 3), scoreOfThisSection(2, 2), Sheets(season & "_スケジュール").Cells(section * 8 - 1, "F").Value, scoreOfThisSection(2, 3))
-    
+
         ' 今節で優勝が決まった場合
         If seasonStatus.Item("今節実施後")(0) <> "" Then
             bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & seasonStatus.Item("今節実施後")(0) & "◇" & season & "ペナントレース優勝が確定！")
@@ -301,7 +324,7 @@ Function makeMPBNewsOfThisSection()
             seasonStatus.Add "次節BA", seasonStatusOfSection(section + 1, "0", "tmp", "X", "X", "tmp", "0")
             seasonStatus.Add "次節AB", seasonStatusOfSection(section + 1, "X", "tmp", "0", "0", "tmp", "X")
             seasonStatus.Add "次節BB", seasonStatusOfSection(section + 1, "0", "tmp", "X", "0", "tmp", "X")
-            
+
             ' 今節
             headerOfNextGame = ""
             ' マジックが消滅するケース
@@ -310,28 +333,28 @@ Function makeMPBNewsOfThisSection()
                     bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                 End If
             Next teamID
-            
+
             ' 自力優勝が消滅するケース
             For teamID = 1 To 5
                 If Left(seasonStatus.Item("今節実施前")(teamID), 1) <> "自" And Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" Then
                     bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                 End If
             Next teamID
-            
+
             ' 自力優勝が復活するケース
             For teamID = 1 To 5
                 If Left(seasonStatus.Item("今節実施前")(teamID), 1) = "自" And Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" Then
                     bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                 End If
             Next teamID
-            
+
             ' マジックが点灯するケース
             For teamID = 1 To 5
                 If Left(seasonStatus.Item("今節実施前")(teamID), 1) <> "M" And Left(seasonStatus.Item("今節実施後")(teamID), 1) = "M" Then
                     bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicAppearance)
                 End If
             Next teamID
-            
+
             ' 次節A_
             headerOfNextGame = "次節 " & teamOfNextSection(1, 1) & "◯-●" & teamOfNextSection(1, 2) & " で、"
             If seasonStatus.Item("次節AA")(0) <> "" And seasonStatus.Item("次節AB")(0) <> "" And seasonStatus.Item("次節AA")(0) = seasonStatus.Item("次節AB")(0) Then
@@ -344,21 +367,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "M" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "M" Then
@@ -366,7 +389,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節B_
             headerOfNextGame = "次節 " & teamOfNextSection(1, 1) & "●-◯" & teamOfNextSection(1, 2) & " で、"
             If seasonStatus.Item("次節BA")(0) <> "" And seasonStatus.Item("次節BB")(0) <> "" And seasonStatus.Item("次節BA")(0) = seasonStatus.Item("次節BB")(0) Then
@@ -379,21 +402,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "M" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "M" Then
@@ -401,7 +424,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節_A
             headerOfNextGame = "次節 " & teamOfNextSection(2, 1) & "◯-●" & teamOfNextSection(2, 2) & " で、"
             If seasonStatus.Item("次節AA")(0) <> "" And seasonStatus.Item("次節BA")(0) <> "" And seasonStatus.Item("次節AA")(0) = seasonStatus.Item("次節BA")(0) Then
@@ -414,21 +437,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "M" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "M" Then
@@ -436,7 +459,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節_B
             headerOfNextGame = "次節 " & teamOfNextSection(2, 1) & "●-◯" & teamOfNextSection(2, 2) & " で、"
             If seasonStatus.Item("次節AB")(0) <> "" And seasonStatus.Item("次節BB")(0) <> "" And seasonStatus.Item("次節AB")(0) = seasonStatus.Item("次節BB")(0) Then
@@ -449,21 +472,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "M" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "M" Then
@@ -471,7 +494,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節AA
             headerOfNextGame = "次節 " & teamOfNextSection(1, 1) & "◯-●" & teamOfNextSection(1, 2) & " & " & teamOfNextSection(2, 1) & "◯-●" & teamOfNextSection(2, 2) & " で、"
             If seasonStatus.Item("次節AA")(0) <> "" And seasonStatus.Item("次節AB")(0) <> seasonStatus.Item("次節AA")(0) And seasonStatus.Item("次節BA")(0) <> seasonStatus.Item("次節AA")(0) Then
@@ -484,21 +507,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "M" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "M" Then
@@ -519,21 +542,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "M" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "M" Then
@@ -541,7 +564,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節AB
             headerOfNextGame = "次節 " & teamOfNextSection(1, 1) & "◯-●" & teamOfNextSection(1, 2) & " & " & teamOfNextSection(2, 1) & "●-◯" & teamOfNextSection(2, 2) & " で、"
             If seasonStatus.Item("次節AB")(0) <> "" And seasonStatus.Item("次節AA")(0) <> seasonStatus.Item("次節AB")(0) And seasonStatus.Item("次節BB")(0) <> seasonStatus.Item("次節AB")(0) Then
@@ -554,21 +577,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "M" And Left(seasonStatus.Item("次節AA")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "M" Then
@@ -576,7 +599,7 @@ Function makeMPBNewsOfThisSection()
                     End If
                 Next teamID
             End If
-            
+
             ' 次節BB
             headerOfNextGame = "次節 " & teamOfNextSection(1, 1) & "●-◯" & teamOfNextSection(1, 2) & " & " & teamOfNextSection(2, 1) & "●-◯" & teamOfNextSection(2, 2) & " で、"
             If seasonStatus.Item("次節BB")(0) <> "" And seasonStatus.Item("次節BA")(0) <> seasonStatus.Item("次節BB")(0) And seasonStatus.Item("次節AB")(0) <> seasonStatus.Item("次節BB")(0) Then
@@ -589,21 +612,21 @@ Function makeMPBNewsOfThisSection()
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateMagicDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が消滅するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryDisappearance)
                     End If
                 Next teamID
-                
+
                 ' 自力優勝が復活するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) = "自" And Left(seasonStatus.Item("次節BB")(teamID), 1) <> "自" And Left(seasonStatus.Item("次節BA")(teamID), 1) = "自" And Left(seasonStatus.Item("次節AB")(teamID), 1) = "自" Then
                         bodyMPBNewsOfThisSection = addLineToText(bodyMPBNewsOfThisSection, "◇" & DICT_TEAM_NAME.Item(dictTeamID.Item(teamID)) & "◇" & headerOfNextGame & messageTemplateSelfVictoryReappearance)
                     End If
                 Next teamID
-                
+
                 ' マジックが点灯するケース
                 For teamID = 1 To 5
                     If Left(seasonStatus.Item("今節実施後")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節BB")(teamID), 1) = "M" And Left(seasonStatus.Item("次節BA")(teamID), 1) <> "M" And Left(seasonStatus.Item("次節AB")(teamID), 1) <> "M" Then
@@ -628,21 +651,21 @@ Function seasonStatusOfSection(sectionNumber As Integer, score1D As String, scor
 
     Dim tmp(2, 3) As String
     Dim resultArray(5) As String
-        
+
     tmp(1, 1) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "D").Value
     tmp(1, 2) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "F").Value
     tmp(1, 3) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "H").Value
     tmp(2, 1) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "D").Value
     tmp(2, 2) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "F").Value
     tmp(2, 3) = Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "H").Value
-    
+
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "D").Value = score1D
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "F").Value = score1F
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "H").Value = score1H
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "D").Value = score2D
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "F").Value = score2F
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "H").Value = score2H
-    
+
     Application.Calculate
 
     Dim teamID As Integer
@@ -661,14 +684,14 @@ Function seasonStatusOfSection(sectionNumber As Integer, score1D As String, scor
         End If
 
     Next teamID
-    
+
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "D").Value = tmp(1, 1)
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "F").Value = tmp(1, 2)
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 5, "H").Value = tmp(1, 3)
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "D").Value = tmp(2, 1)
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "F").Value = tmp(2, 2)
     Sheets(season & "_スケジュール").Cells(sectionNumber * 8 - 1, "H").Value = tmp(2, 3)
-    
+
     Application.Calculate
 
     seasonStatusOfSection = resultArray()
@@ -870,12 +893,12 @@ Function makeMPBNewsOfNextGame()
 
     bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "[第" & section + 1 & "節]")
     If Sheets(season & "_スケジュール").Cells(8 * section + 3, "F").Value <> "" Then
-        bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "<実施済>　" & Sheets(season & "_スケジュール").Cells(8 * section + 2, "C").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 3, "D").Value & " - " & Sheets(season & "_スケジュール").Cells(8 * section + 3, "H").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 2, "J").Value)
+        bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "<実施済> " & Sheets(season & "_スケジュール").Cells(8 * section + 2, "C").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 3, "D").Value & " - " & Sheets(season & "_スケジュール").Cells(8 * section + 3, "H").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 2, "J").Value)
     Else
         bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, Sheets(season & "_スケジュール").Cells(8 * section + 2, "C").Value & "(" & Sheets(season & "_スケジュール").Cells(8 * section + 2, "D").Value & ") - (" & Sheets(season & "_スケジュール").Cells(8 * section + 2, "H").Value & ") " & Sheets(season & "_スケジュール").Cells(8 * section + 2, "J").Value)
     End If
     If Sheets(season & "_スケジュール").Cells(8 * section + 7, "F").Value Then
-        bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "<実施済>　" & Sheets(season & "_スケジュール").Cells(8 * section + 6, "C").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "D").Value & " - " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "H").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "J").Value)
+        bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "<実施済> " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "C").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "D").Value & " - " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "H").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "J").Value)
     Else
         bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, Sheets(season & "_スケジュール").Cells(8 * section + 6, "C").Value & "(" & Sheets(season & "_スケジュール").Cells(8 * section + 6, "D").Value & ") - (" & Sheets(season & "_スケジュール").Cells(8 * section + 6, "H").Value & ") " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "J").Value)
     End If
@@ -907,7 +930,6 @@ Function savePictureOfSchedule()
     Else
         Call savePngFile(Sheets(season & "_スケジュール").Range("A" & WorksheetFunction.Max(1, section * 8 - 6) & ":AG" & WorksheetFunction.Max(41, section * 8 - 6 + 55)), LOCAL_WORK_DIRECTORY_PATH & "\batch-min\mpbpicture-schedule.png")
     End If
-
 
 End Function
 
