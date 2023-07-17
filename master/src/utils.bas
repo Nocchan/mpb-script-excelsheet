@@ -10,27 +10,21 @@ Public Function showMessageDebug(message As String, Optional title As String = "
         Exit Function
     End If
 
-    MsgBox message, _
-           vbInformation, _
-           "[DEBUG] " & title
+    MsgBox message, vbInformation, "[DEBUG] " & title
 
 End Function
 
 ' Infoレベルのメッセージ
 Public Function showMessageInfo(message As String, Optional title As String = "")
 
-    MsgBox message, _
-           vbExclamation, _
-           "[INFO] " & title
+    MsgBox message, vbExclamation, "[INFO] " & title
 
 End Function
 
 ' Errorレベルのメッセージ
 Public Function showMessageError(message As String, Optional title As String = "")
 
-    MsgBox message, _
-           vbCritical, _
-           "[ERROR] " & title
+    MsgBox message, vbCritical, "[ERROR] " & title
 
 End Function
 
@@ -38,9 +32,9 @@ End Function
 Public Function makeBackupFile()
 
     If isDebugMode Then
-        ActiveWorkbook.SaveCopyAs Filename:="C:\Users\TaiNo\Desktop\ペナントバックアップ\" & Format(Now, "yyyymmddhhnnss") & "-Debug.xlsm"
+        ActiveWorkbook.SaveCopyAs Filename:="C:\Users\TaiNo\Desktop\MPB\backup\" & Format(Now, "yyyymmddhhnnss") & "-Debug.xlsm"
     Else
-        ActiveWorkbook.SaveCopyAs Filename:="C:\Users\TaiNo\Desktop\ペナントバックアップ\" & Format(Now, "yyyymmddhhnnss") & ".xlsm"
+        ActiveWorkbook.SaveCopyAs Filename:="C:\Users\TaiNo\Desktop\MPB\backup\" & Format(Now, "yyyymmddhhnnss") & ".xlsm"
     End If
 
 End Function
@@ -77,8 +71,7 @@ End Function
 ' 改行して追記
 Public Function addLineToText(baseText As String, addText As String)
 
-    addLineToText = baseText & vbCrLf & _
-                 addText
+    addLineToText = baseText & vbCrLf & addText
 
 End Function
 
