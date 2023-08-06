@@ -113,8 +113,6 @@ Sub 並び替え()
 
     End If
 
-    Call バックアップ
-
     ActiveSheet.Protect AllowFormattingColumns:=True, AllowFormattingRows:=True
     Application.ScreenUpdating = True
 

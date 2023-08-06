@@ -165,7 +165,7 @@ Function makeMPBNewsSeasonEvent()
     End If
 
     ' HDCP変更中
-    If section = 11 or section = 12 Then
+    If section = 11 Or section = 12 Then
         existMPBNewsSeasonEvent = True
 
         bodyMPBNewsSeasonEvent = addLineToText(bodyMPBNewsSeasonEvent, "")
@@ -897,7 +897,7 @@ Function makeMPBNewsOfNextGame()
     Else
         bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, Sheets(season & "_スケジュール").Cells(8 * section + 2, "C").Value & "(" & Sheets(season & "_スケジュール").Cells(8 * section + 2, "D").Value & ") - (" & Sheets(season & "_スケジュール").Cells(8 * section + 2, "H").Value & ") " & Sheets(season & "_スケジュール").Cells(8 * section + 2, "J").Value)
     End If
-    If Sheets(season & "_スケジュール").Cells(8 * section + 7, "F").Value Then
+    If Sheets(season & "_スケジュール").Cells(8 * section + 7, "F").Value <> "" Then
         bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, "<実施済> " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "C").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "D").Value & " - " & Sheets(season & "_スケジュール").Cells(8 * section + 7, "H").Value & " " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "J").Value)
     Else
         bodyMPBNewsOfNextGame = addLineToText(bodyMPBNewsOfNextGame, Sheets(season & "_スケジュール").Cells(8 * section + 6, "C").Value & "(" & Sheets(season & "_スケジュール").Cells(8 * section + 6, "D").Value & ") - (" & Sheets(season & "_スケジュール").Cells(8 * section + 6, "H").Value & ") " & Sheets(season & "_スケジュール").Cells(8 * section + 6, "J").Value)
